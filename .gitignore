@@ -1,0 +1,7 @@
+*.ast
+*.bak
+*.exe
+*.o
+*.sublime-workspace
+
+.tags

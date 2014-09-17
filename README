@@ -1,0 +1,46 @@
+
+                            _____
+              ....  .... ...   //   ....
+            .|...||  '|.  |   //  .|   ''
+            ||        '|.|    \\  ||
+             '|...'    '|      ))  '|...'
+                              //
+                             /
+    ___         __________________________________
+    ___ VERSION __________________________________
+
+    ev3-c       0.0a1
+                2014-09-17
+    ___             ______________________________
+    ___ WHAT IS IT? ______________________________
+
+    ev3-c is a C library for the LEGO Mindstorms EV3 remote access.
+
+    JUST A PROTOTYPE, COMING SOON... ))
+
+    ___       ____________________________________
+    ___ F A Q ____________________________________
+
+    * * *  What are unusual ".yu" files for?
+
+    ev3dev-c is written using yupp C preprocessor, but don't panic,
+    generated source files in C also included.
+
+    ___     ______________________________________
+    ___ GIT ______________________________________
+
+    Enter in the following on your command-line to clone the library
+    repository:
+
+        git clone https://github.com/in4lio/ev3-c.git
+
+    ___         __________________________________
+    ___ CONTACT __________________________________
+
+    Please feel free to contact me at in4lio@gmail.com if you have
+    any questions about the library.
+
+    ___         __________________________________
+    ___ LICENSE __________________________________
+
+    Please see the file called "LICENSE".

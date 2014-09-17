@@ -1,0 +1,94 @@
+($import "app.yu")
+($TITLE,,ev3-c prototype.)
+
+($import stdlib)
+
+#include <stdbool.h>
+#include <stdio.h>
+
+#include "lego.h"
+#include "ev3_wlan.h"
+#include "ev3_link.h"
+#include "ev3_misc.h"
+
+#define OUT_A    0x01
+#define OUT_B    0x02
+#define OUT_C    0x04
+#define OUT_D    0x08
+#define OUT_ALL  0x0F
+
+#define IN_1  0
+#define IN_2  1
+#define IN_3  2
+#define IN_4  3
+
+($dict LMC
+	(` LMC_NAME      LMC_PARS        LMC_GLOB  LMC_CODE  )
+	(`
+	(  tacho_start   (`uint8_t val)  0         (`opOUTPUT_POWER, LC0( 0 ), LC0( port ), LC0( val ), opOUTPUT_START, LC0( 0 ), LC0( port ))  )
+	(  tacho_stop    (`)             0         (`opOUTPUT_STOP, LC0( 0 ), LC0( port ),LC0( 0 ))  )
+	(  sensor_name   (`)             16        (`opINPUT_DEVICE, LC0( GET_NAME ), LC0( 0 ), LC0( port ), LC0( globals ), GV0( 0 ))  )
+	(  sensor_value  (`)             1         (`opINPUT_READ, LC0( 0 ), LC0( port ), LC0( 0 ), LC0( 0 ), GV0( 0 ))  )
+	)
+)
+
+($each-LMC \i.]
+
+	bool ($i LMC_NAME)( uint8_t port($[, ($i LMC_PARS)] ? ($i LMC_PARS))($[, void *buf] ? ($i LMC_GLOB)) )
+	{
+		($[size_t globals = ($i LMC_GLOB);] ? ($i LMC_GLOB))
+		uint8_t lmc[] = { ($i LMC_CODE) };
+		int n = ev3_tcp_direct( ($i LMC_GLOB), 0, lmc, sizeof( lmc ), DIRECT_COMMAND_($[NO_] ? ($not_ ($i LMC_GLOB)))REPLY );
+		if ( n == EOF ) return ( false );
+
+		($if ($i LMC_GLOB) \then ]
+			sleep_msec( 100 );
+			return ( ev3_tcp_direct_reply( n, buf, &globals ) == DIRECT_REPLY );
+		[ \else ]
+			return ( false );
+		[ )
+	}
+
+[ )
+
+bool ev3_connect( void )
+{
+	if ( ev3_udp_connect() != EOF ) {
+		int i;
+
+		for ( i = 0; i < 10; i++ ) {
+			sleep_msec( 1000 );
+			if ( ev3_udp_catch_address() > 0 ) break;
+		}
+		ev3_udp_disconnect();
+	}
+	if ( ev3_tcp_connect() == EOF ) return ( false );
+	if ( ev3_tcp_unlock_request() == EOF ) return ( false );
+
+	sleep_msec( 100 );
+	ev3_tcp_unlock_reply();
+
+	return ( true );
+}
+
+int main( int argc, char **argv )
+{
+	char buf[ 256 ];
+	uint8_t val;
+
+	if ( !ev3_connect()) return ( 1 );
+
+	tacho_start( OUT_ALL, 20 );
+	sleep_msec( 2000 );
+	tacho_stop( OUT_ALL );
+
+	sleep_msec( 100 );
+	if ( sensor_name( IN_1, buf )) printf( "IN_1 '%s'\n", buf );
+
+	sleep_msec( 100 );
+	if ( sensor_value( IN_1, &val )) printf( "IN_1 value = %d\n", val );
+
+	ev3_tcp_disconnect();
+
+	return ( 0 );
+}
