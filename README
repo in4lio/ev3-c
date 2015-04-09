@@ -23,7 +23,7 @@
 
     * * *  What are unusual ".yu" files for?
 
-    ev3dev-c is written using yupp C preprocessor, but don't panic,
+    ev3-c is written using yupp C preprocessor, but don't panic,
     generated source files in C also included.
 
     ___     ______________________________________
