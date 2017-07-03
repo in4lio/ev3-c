@@ -16,7 +16,7 @@
 
     ev3-c is a C library for the LEGO Mindstorms EV3 remote access.
 
-    JUST A PROTOTYPE, COMING SOON... ))
+    JUST A PROTOTYPE... ))
 
     ___       ____________________________________
     ___ F A Q ____________________________________
@@ -24,7 +24,7 @@
     * * *  What are unusual ".yu" files for?
 
     ev3-c is written using yupp C preprocessor, but don't panic,
-    generated source files in C also included.
+    the generated source files in C also included.
 
     ___     ______________________________________
     ___ GIT ______________________________________
